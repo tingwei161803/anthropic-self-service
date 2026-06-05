@@ -308,3 +308,18 @@ a { color:inherit; text-decoration:none; }
 .cta-link:hover { filter:brightness(1.06); transform:translateY(-1px); }
 .cta-link:focus-visible { outline:3px solid var(--tertiary); outline-offset:2px; }
 .cta-link .material-symbols-rounded { font-size:1.1rem; }
+
+/* GitHub star button (appbar, top-right) */
+.gh-star {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 12px; border-radius:999px; line-height:1;
+  border:1px solid var(--outline-variant); background:var(--surface-container);
+  color:var(--on-surface); text-decoration:none; font-size:.82rem; font-weight:600;
+  transition:background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.gh-star:hover { background:var(--surface-container-high); border-color:var(--outline); transform:translateY(-1px); }
+.gh-star:focus-visible { outline:3px solid var(--primary); outline-offset:2px; }
+.gh-star__icon { font-size:1.05rem; color:#f5b50a; }
+.gh-star__count { font-variant-numeric:tabular-nums; color:var(--on-surface-variant); }
+.gh-star__count:empty { display:none; }
+@media (max-width:420px) { .gh-star__label { display:none; } }

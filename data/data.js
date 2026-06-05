@@ -13,6 +13,7 @@
    ========================================================================= */
 
 window.SITE_META = {
+  repo: "tingwei161803/anthropic-self-service",
   title: {
     en: "Self-Service Analytics with Claude",
     zh: "用 Claude 打造自助式數據分析"
