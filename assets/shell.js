@@ -88,6 +88,14 @@
           '<span class="brand__name" id="brandName"></span>' +
         '</a>' +
         '<div class="appbar__actions">' +
+          (META.repo ?
+            '<a class="gh-star" id="ghStar" href="https://github.com/' + escapeHtml(META.repo) + '" ' +
+              'target="_blank" rel="noopener" title="Star on GitHub" ' +
+              'aria-label="Star this project on GitHub / 到 GitHub 為此專案按星星">' +
+              '<span class="material-symbols-rounded gh-star__icon" aria-hidden="true">star</span>' +
+              '<span class="gh-star__label">Star</span>' +
+              '<span class="gh-star__count" id="ghStarCount" aria-hidden="true"></span>' +
+            '</a>' : "") +
           '<button class="icon-btn" id="langToggle" type="button" title="Language" aria-label="Toggle language / 切換語言">' +
             '<span class="material-symbols-rounded">translate</span>' +
             '<span class="icon-btn__txt" id="langLabel">中</span>' +
@@ -221,6 +229,28 @@
     dialog: function () { return document.getElementById("dialog"); }
   };
 
+  /* ---------- GitHub star count (no auth; degrades silently) ---------- */
+  function fmtStars(n) {
+    if (n >= 1000) {
+      var k = n / 1000;
+      return (k >= 10 ? Math.round(k) : (Math.round(k * 10) / 10)) + "k";
+    }
+    return String(n);
+  }
+  function loadStars() {
+    if (!META.repo) return;
+    var el = document.getElementById("ghStarCount");
+    if (!el || typeof fetch !== "function") return;
+    fetch("https://api.github.com/repos/" + META.repo)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (j && typeof j.stargazers_count === "number") {
+          el.textContent = fmtStars(j.stargazers_count);
+        }
+      })
+      .catch(function () { /* offline / rate-limited: leave the link as-is */ });
+  }
+
   /* =======================================================================
      INIT
      ===================================================================== */
@@ -230,6 +260,7 @@
     applyLangChrome();
     refreshChrome();
     wire();
+    loadStars();
     window.LDW.ready = true;
     document.dispatchEvent(new CustomEvent("ldw:shell-ready"));
   }
