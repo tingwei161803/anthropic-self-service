@@ -22,8 +22,8 @@ window.SITE_META = {
     zh: "Anthropic 如何把資料倉儲變成 95% 準確率的自助分析師 —— 非官方視覺化整理。"
   },
   footer: {
-    en: "Unofficial summary of Anthropic's engineering blog · Built with lazy-data2web · static, no build step.",
-    zh: "Anthropic 工程部落格的非官方整理 · 使用 lazy-data2web 建置 · 純靜態、無建置流程。"
+    en: "Unofficial summary of Anthropic's engineering blog.",
+    zh: "Anthropic 工程部落格的非官方整理。"
   }
 };
 
