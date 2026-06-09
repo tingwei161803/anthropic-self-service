@@ -10,7 +10,7 @@
 
 | | |
 |---|---|
-| 🌐 網站 | <https://tingwei161803.github.io/anthropic-self-service/> |
+| 🌐 網站 | <https://anthropic-self-service.peteraim.com/> |
 
 > 直接點進去就能用,無需安裝。每一頁都有獨立網址(如 `/skills.html`),「真實來源」頁的每張卡片還能用 `…/sources.html#semantic-layer` 深連結直接分享。
 
