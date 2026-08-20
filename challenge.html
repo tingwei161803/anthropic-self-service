@@ -47,7 +47,9 @@
 </head>
 <body data-page="challenge">
   <!-- shell.js injects the app bar, cross-page nav, footer and dialog around this -->
-  <main id="page"></main>
+  <main id="page">
+<header class="page-head"><h1>挑戰</h1><p class="page-head__sub">為什麼把 LLM 指向資料倉儲還不夠 —— 分析代理會失敗的三種方式。</p></header><div class="bento"><article class="tile tile--wide tile--accent" data-item=""><span class="material-symbols-rounded tile__icon" aria-hidden="true">warning</span><h3 class="tile__title">虛假的精確</h3><p class="tile__body">沒有防護就把 Claude 指向資料倉儲,會產生自信卻錯誤的答案,也讓使用者與基礎架構專業脫節。</p></article><article class="tile tile--md" data-item=""><span class="material-symbols-rounded tile__icon" aria-hidden="true">device_hub</span><h3 class="tile__title">概念對應實體的歧義</h3><p class="tile__body">有上百張可用的表,到底哪些欄位定義「活躍用戶」?用什麼篩選、回看多長?</p></article><article class="tile tile--md" data-item=""><span class="material-symbols-rounded tile__icon" aria-hidden="true">schedule</span><h3 class="tile__title">資料過時</h3><p class="tile__body">業務定義與 schema 不斷改變,代理的知識會悄悄過時。</p></article><article class="tile tile--md" data-item=""><span class="material-symbols-rounded tile__icon" aria-hidden="true">search_off</span><h3 class="tile__title">檢索失敗</h3><p class="tile__body">正確資訊其實存在,卻埋在龐大的搜尋空間裡,代理永遠找不到。</p></article></div>
+</main>
 
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
