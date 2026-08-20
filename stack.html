@@ -47,7 +47,9 @@
 </head>
 <body data-page="stack">
   <!-- shell.js injects the app bar, cross-page nav, footer and dialog around this -->
-  <main id="page"></main>
+  <main id="page">
+<header class="page-head"><h1>代理式分析堆疊</h1><p class="page-head__sub">分層系統,每一層各自解決一種失敗模式。</p></header><ol class="timeline"><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 1 層</span><h3 class="tl-title">資料基礎</h3><p class="tl-body">標準化、嚴格治理的單一真實來源資料集。透過工具、CI 檢查與規範強制標準,並把中繼資料(描述、定義、血緣)當成一級產品來經營。</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 2 層</span><h3 class="tl-title">真實來源</h3><p class="tl-body">由編譯後的指標定義組成的語意層、血緣圖、提煉過的查詢語料庫,以及業務知識圖譜 —— 代理可以信賴的治理化答案。</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 3 層</span><h3 class="tl-title">技能 (Skills)</h3><p class="tl-body">以 markdown 資料夾編碼、Claude 隨需讀取的程序性知識。加入 Skills 後,整體準確率從 21% 提升到 95%+。</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 4 層</span><h3 class="tl-title">驗證</h3><p class="tl-body">離線評測、消融測試與線上防護 —— 對抗式複查、來源出處註腳、資料品質檢查,以及自動化的修正回收。</p></div></li></ol>
+</main>
 
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>

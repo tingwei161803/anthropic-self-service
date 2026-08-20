@@ -81,8 +81,9 @@ uv run python -m http.server 4173
 
 ```bash
 uv run --with playwright playwright install chromium      # 首次
-uv run --with playwright python <lazy-data2web>/scripts/verify.py --dir .
 ```
+
+搭配自訂的 Playwright 腳本可跑上述檢查。
 
 驗收會自動偵測多頁面,逐頁檢查標題、內容渲染、語言/主題切換、搜尋/篩選/對話框/深連結、375px 響應式、a11y 與 console 無錯誤,並驗「跨頁 nav 皆 200」「語言跨頁持久」。
 
