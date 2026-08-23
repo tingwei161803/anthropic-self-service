@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant" data-theme="light">
+<html lang="en" data-theme="light">
 <head>
   <!-- ==== Google Analytics 4 (Measurement ID: G-35VV0MPEQQ) ==== -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-35VV0MPEQQ"></script>
@@ -15,7 +15,7 @@
   <title>Validation · Self-Service Analytics with Claude</title>
   <meta name="description" content="Offline evals, ablation testing and online safeguards — plus the cost of adversarial review: +6% accuracy, +32% tokens, +72% latency." />
   <meta name="theme-color" content="#6750A4" />
-  <link rel="canonical" href="https://anthropic-self-service.peteraim.com/validation.html" />
+  <link rel="canonical" href="https://anthropic-self-service.peteraim.com/en/validation.html" />
   <link rel="alternate" hreflang="zh-Hant" href="https://anthropic-self-service.peteraim.com/validation.html" />
   <link rel="alternate" hreflang="en" href="https://anthropic-self-service.peteraim.com/en/validation.html" />
   <link rel="alternate" hreflang="x-default" href="https://anthropic-self-service.peteraim.com/validation.html" />
@@ -25,7 +25,7 @@
   <meta property="og:site_name" content="Self-Service Analytics with Claude" />
   <meta property="og:title" content="Validation · Self-Service Analytics with Claude" />
   <meta property="og:description" content="Offline evals, ablation testing and online safeguards — plus the cost of adversarial review: +6% accuracy, +32% tokens, +72% latency." />
-  <meta property="og:url" content="https://anthropic-self-service.peteraim.com/validation.html" />
+  <meta property="og:url" content="https://anthropic-self-service.peteraim.com/en/validation.html" />
   <meta property="og:image" content="https://anthropic-self-service.peteraim.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -44,19 +44,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,400..700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="../assets/styles.css" />
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Validation · Self-Service Analytics with Claude","url":"https://anthropic-self-service.peteraim.com/validation.html","description":"Offline evals, ablation testing and online safeguards — plus the cost of adversarial review: +6% accuracy, +32% tokens, +72% latency.","isPartOf":{"@type":"WebSite","name":"Self-Service Analytics with Claude","url":"https://anthropic-self-service.peteraim.com/"},"isBasedOn":"https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude","inLanguage":["zh-Hant","en"]}</script>
 </head>
 <body data-page="validation">
   <!-- shell.js injects the app bar, cross-page nav, footer and dialog around this -->
   <main id="page">
-<header class="page-head"><h1>驗證</h1><p class="page-head__sub">信任來自量測。一項消融實驗甚至顯示,直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構,而不是存取權。</p></header><div class="stat-grid"><div class="stat-card" data-item=""><span class="stat-label">整體準確率</span><b class="stat-value">95%</b></div><div class="stat-card" data-item=""><span class="stat-label">對抗式複查 → 準確率</span><b class="stat-value">+6%</b></div><div class="stat-card" data-item=""><span class="stat-label">對抗式複查 → token</span><b class="stat-value">+32%</b></div><div class="stat-card" data-item=""><span class="stat-label">對抗式複查 → 延遲</span><b class="stat-value">+72%</b></div></div><div class="panel-grid"><figure class="panel" data-item=""><figcaption>對抗式複查的代價</figcaption><div class="chart-wrap"><svg viewBox="0 0 520 240" role="img" preserveAspectRatio="xMidYMid meet" aria-label="bar chart"><line class="axis-line" x1="16" y1="196" x2="504" y2="196"></line><rect class="bar-rect" x="16" y="181" width="153.33" height="15" rx="5"><title>準確率提升: 6</title></rect><text class="bar-value" x="92.67" y="175" text-anchor="middle">6</text><text class="bar-label" x="92.67" y="214" text-anchor="middle">準確率提升</text><rect class="bar-rect" x="183.33" y="116" width="153.33" height="80" rx="5"><title>額外 token: 32</title></rect><text class="bar-value" x="260" y="110" text-anchor="middle">32</text><text class="bar-label" x="260" y="214" text-anchor="middle">額外 token</text><rect class="bar-rect" x="350.67" y="16" width="153.33" height="180" rx="5"><title>額外延遲: 72</title></rect><text class="bar-value" x="427.33" y="10" text-anchor="middle">72</text><text class="bar-label" x="427.33" y="214" text-anchor="middle">額外延遲</text></svg></div></figure></div><div class="panel panel--wide" data-item=""><div class="table-wrap"><table class="data-table"><thead><tr><th>方法</th><th>作用</th><th>類型</th></tr></thead><tbody><tr data-item=""><td>以儀表板為基礎的評測</td><td>自動產生、人工驗證的標準答案</td><td>離線</td></tr><tr data-item=""><td>長尾評測</td><td>由 LLM 依業務脈絡產生</td><td>離線</td></tr><tr data-item=""><td>消融測試</td><td>找出真正影響準確率的元件</td><td>離線</td></tr><tr data-item=""><td>對抗式複查</td><td>再跑一次、對答案提出批判</td><td>線上</td></tr><tr data-item=""><td>來源出處註腳</td><td>標示資料來源層級與新鮮度</td><td>線上</td></tr><tr data-item=""><td>修正回收</td><td>把使用者的更正轉成自動化 PR</td><td>線上</td></tr></tbody></table></div></div>
+<header class="page-head"><h1>Validation</h1><p class="page-head__sub">Trust comes from measurement. One ablation even showed direct SQL access didn't help — the bottleneck was structure, not access.</p></header><div class="stat-grid"><div class="stat-card" data-item=""><span class="stat-label">Aggregate accuracy</span><b class="stat-value">95%</b></div><div class="stat-card" data-item=""><span class="stat-label">Adversarial review → accuracy</span><b class="stat-value">+6%</b></div><div class="stat-card" data-item=""><span class="stat-label">Adversarial review → tokens</span><b class="stat-value">+32%</b></div><div class="stat-card" data-item=""><span class="stat-label">Adversarial review → latency</span><b class="stat-value">+72%</b></div></div><div class="panel-grid"><figure class="panel" data-item=""><figcaption>The cost of adversarial review</figcaption><div class="chart-wrap"><svg viewBox="0 0 520 240" role="img" preserveAspectRatio="xMidYMid meet" aria-label="bar chart"><line class="axis-line" x1="16" y1="196" x2="504" y2="196"></line><rect class="bar-rect" x="16" y="181" width="153.33" height="15" rx="5"><title>Accuracy gain: 6</title></rect><text class="bar-value" x="92.67" y="175" text-anchor="middle">6</text><text class="bar-label" x="92.67" y="214" text-anchor="middle">Accuracy gain</text><rect class="bar-rect" x="183.33" y="116" width="153.33" height="80" rx="5"><title>Extra tokens: 32</title></rect><text class="bar-value" x="260" y="110" text-anchor="middle">32</text><text class="bar-label" x="260" y="214" text-anchor="middle">Extra tokens</text><rect class="bar-rect" x="350.67" y="16" width="153.33" height="180" rx="5"><title>Extra latency: 72</title></rect><text class="bar-value" x="427.33" y="10" text-anchor="middle">72</text><text class="bar-label" x="427.33" y="214" text-anchor="middle">Extra latency</text></svg></div></figure></div><div class="panel panel--wide" data-item=""><div class="table-wrap"><table class="data-table"><thead><tr><th>Method</th><th>What it does</th><th>Type</th></tr></thead><tbody><tr data-item=""><td>Dashboard-based evals</td><td>Auto-generated, human-validated ground truth</td><td>Offline</td></tr><tr data-item=""><td>Long-tail evals</td><td>LLM-generated from business context</td><td>Offline</td></tr><tr data-item=""><td>Ablation testing</td><td>Isolate which component actually moves accuracy</td><td>Offline</td></tr><tr data-item=""><td>Adversarial review</td><td>A second pass that critiques the answer</td><td>Online</td></tr><tr data-item=""><td>Provenance footers</td><td>Show data source tier and freshness</td><td>Online</td></tr><tr data-item=""><td>Correction harvesting</td><td>Turn stakeholder fixes into automated PRs</td><td>Online</td></tr></tbody></table></div></div>
 </main>
 
-  <script src="data/data.js"></script>
-  <script src="assets/shell.js"></script>
-  <script src="assets/app.js"></script>
-<p class="lang-alt-link" style="text-align:center;padding:12px;"><a href="/en/validation.html" hreflang="en" rel="alternate" lang="en">English version</a></p>
+  <script src="../data/data.js"></script>
+  <script src="../assets/shell.js"></script>
+  <script src="../assets/app.js"></script>
+<p class="lang-alt-link" style="text-align:center;padding:12px;"><a href="/validation.html" hreflang="zh-Hant" rel="alternate" lang="zh-Hant">中文版</a></p>
 </body>
 </html>

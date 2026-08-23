@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant" data-theme="light">
+<html lang="en" data-theme="light">
 <head>
   <!-- ==== Google Analytics 4 (Measurement ID: G-35VV0MPEQQ) ==== -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-35VV0MPEQQ"></script>
@@ -15,7 +15,7 @@
   <title>The Agentic Analytics Stack · Self-Service Analytics with Claude</title>
   <meta name="description" content="A four-layer system — Data Foundations, Sources of Truth, Skills, Validation — each layer fixing a specific failure mode." />
   <meta name="theme-color" content="#6750A4" />
-  <link rel="canonical" href="https://anthropic-self-service.peteraim.com/stack.html" />
+  <link rel="canonical" href="https://anthropic-self-service.peteraim.com/en/stack.html" />
   <link rel="alternate" hreflang="zh-Hant" href="https://anthropic-self-service.peteraim.com/stack.html" />
   <link rel="alternate" hreflang="en" href="https://anthropic-self-service.peteraim.com/en/stack.html" />
   <link rel="alternate" hreflang="x-default" href="https://anthropic-self-service.peteraim.com/stack.html" />
@@ -25,7 +25,7 @@
   <meta property="og:site_name" content="Self-Service Analytics with Claude" />
   <meta property="og:title" content="The Agentic Analytics Stack · Self-Service Analytics with Claude" />
   <meta property="og:description" content="A four-layer system — Data Foundations, Sources of Truth, Skills, Validation — each layer fixing a specific failure mode." />
-  <meta property="og:url" content="https://anthropic-self-service.peteraim.com/stack.html" />
+  <meta property="og:url" content="https://anthropic-self-service.peteraim.com/en/stack.html" />
   <meta property="og:image" content="https://anthropic-self-service.peteraim.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -44,19 +44,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,400..700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="../assets/styles.css" />
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"The Agentic Analytics Stack · Self-Service Analytics with Claude","url":"https://anthropic-self-service.peteraim.com/stack.html","description":"A four-layer system — Data Foundations, Sources of Truth, Skills, Validation — each layer fixing a specific failure mode.","isPartOf":{"@type":"WebSite","name":"Self-Service Analytics with Claude","url":"https://anthropic-self-service.peteraim.com/"},"isBasedOn":"https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude","inLanguage":["zh-Hant","en"]}</script>
 </head>
 <body data-page="stack">
   <!-- shell.js injects the app bar, cross-page nav, footer and dialog around this -->
   <main id="page">
-<header class="page-head"><h1>代理式分析堆疊</h1><p class="page-head__sub">分層系統,每一層各自解決一種失敗模式。</p></header><ol class="timeline"><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 1 層</span><h3 class="tl-title">資料基礎</h3><p class="tl-body">標準化、嚴格治理的單一真實來源資料集。透過工具、CI 檢查與規範強制標準,並把中繼資料(描述、定義、血緣)當成一級產品來經營。</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 2 層</span><h3 class="tl-title">真實來源</h3><p class="tl-body">由編譯後的指標定義組成的語意層、血緣圖、提煉過的查詢語料庫,以及業務知識圖譜 —— 代理可以信賴的治理化答案。</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 3 層</span><h3 class="tl-title">技能 (Skills)</h3><p class="tl-body">以 markdown 資料夾編碼、Claude 隨需讀取的程序性知識。加入 Skills 後,整體準確率從 21% 提升到 95%+。</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">第 4 層</span><h3 class="tl-title">驗證</h3><p class="tl-body">離線評測、消融測試與線上防護 —— 對抗式複查、來源出處註腳、資料品質檢查,以及自動化的修正回收。</p></div></li></ol>
+<header class="page-head"><h1>The Agentic Analytics Stack</h1><p class="page-head__sub">A layered system, each layer fixing a specific failure mode.</p></header><ol class="timeline"><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">Layer 01</span><h3 class="tl-title">Data Foundations</h3><p class="tl-body">Canonical, heavily-governed single-source-of-truth datasets. Standards are enforced through tooling, CI checks and mandates, with metadata (descriptions, definitions, lineage) treated as a first-class product.</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">Layer 02</span><h3 class="tl-title">Sources of Truth</h3><p class="tl-body">A semantic layer of compiled metric definitions, a lineage graph, a distilled query corpus and a business knowledge graph — governed answer keys the agent can rely on.</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">Layer 03</span><h3 class="tl-title">Skills</h3><p class="tl-body">Procedural knowledge encoded as markdown folders Claude reads on demand. Adding Skills lifted aggregate accuracy from 21% to 95%+.</p></div></li><li class="tl-item" data-item=""><div class="tl-dot" aria-hidden="true"></div><div class="tl-card"><span class="tl-date">Layer 04</span><h3 class="tl-title">Validation</h3><p class="tl-body">Offline evals, ablation testing and online safeguards — adversarial review, provenance footers, data-quality checks and automated correction harvesting.</p></div></li></ol>
 </main>
 
-  <script src="data/data.js"></script>
-  <script src="assets/shell.js"></script>
-  <script src="assets/app.js"></script>
-<p class="lang-alt-link" style="text-align:center;padding:12px;"><a href="/en/stack.html" hreflang="en" rel="alternate" lang="en">English version</a></p>
+  <script src="../data/data.js"></script>
+  <script src="../assets/shell.js"></script>
+  <script src="../assets/app.js"></script>
+<p class="lang-alt-link" style="text-align:center;padding:12px;"><a href="/stack.html" hreflang="zh-Hant" rel="alternate" lang="zh-Hant">中文版</a></p>
 </body>
 </html>
