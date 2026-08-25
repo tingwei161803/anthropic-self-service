@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <!-- ==== Google Analytics 4 (Measurement ID: G-35VV0MPEQQ) ==== -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-35VV0MPEQQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-35VV0MPEQQ');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Getting Started · Self-Service Analytics with Claude</title>
+  <meta name="description" content="Where to start from zero, and the principles to align on before launching an analytics agent." />
+  <meta name="theme-color" content="#6750A4" />
+  <link rel="canonical" href="https://anthropic-self-service.peteraim.com/en/playbook.html" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://anthropic-self-service.peteraim.com/playbook.html" />
+  <link rel="alternate" hreflang="en" href="https://anthropic-self-service.peteraim.com/en/playbook.html" />
+  <link rel="alternate" hreflang="x-default" href="https://anthropic-self-service.peteraim.com/playbook.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Self-Service Analytics with Claude" />
+  <meta property="og:title" content="Getting Started · Self-Service Analytics with Claude" />
+  <meta property="og:description" content="Where to start from zero, and the principles to align on before launching an analytics agent." />
+  <meta property="og:url" content="https://anthropic-self-service.peteraim.com/en/playbook.html" />
+  <meta property="og:image" content="https://anthropic-self-service.peteraim.com/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Self-Service Analytics with Claude — 21% to 95% accuracy once Skills were added (unofficial visual summary)" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_TW" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Getting Started · Self-Service Analytics with Claude" />
+  <meta name="twitter:description" content="Where to start from zero, and the principles to align on before launching an analytics agent." />
+  <meta name="twitter:image" content="https://anthropic-self-service.peteraim.com/assets/og-image.png" />
+  <meta name="twitter:image:alt" content="Self-Service Analytics with Claude — 21% to 95% accuracy once Skills were added (unofficial visual summary)" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,400..700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Getting Started · Self-Service Analytics with Claude","url":"https://anthropic-self-service.peteraim.com/en/playbook.html","description":"Where to start from zero, and the principles to align on before launching an analytics agent.","isPartOf":{"@type":"WebSite","name":"Self-Service Analytics with Claude","url":"https://anthropic-self-service.peteraim.com/en/"},"isBasedOn":"https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude","inLanguage":["en"]}</script>
+</head>
+<body data-page="playbook">
+  <!-- shell.js injects the app bar, cross-page nav, footer and dialog around this -->
+  <main id="page">
+<header class="page-head"><h1>Getting Started</h1><p class="page-head__sub">From zero, and the principles to align on first.</p></header><div class="toolbar"><input id="search" class="search" type="search" autocomplete="off" placeholder="Search…" aria-label="Search"></div><div class="accordion" id="accordion"><details class="acc-item" data-item="" data-q="where should we start from zero? canonical datasets + a few dozen offline evals + one thin knowledge skill capture most of the upside. you don't need the whole stack to launch."><summary class="acc-q"><span>Where should we start from zero?</span><span class="material-symbols-rounded acc-chevron" aria-hidden="true">expand_more</span></summary><div class="acc-a">Canonical datasets + a few dozen offline evals + one thin knowledge skill capture most of the upside. You don't need the whole stack to launch.</div></details><details class="acc-item" data-item="" data-q="how much does current accuracy matter vs. future improvement? decide up front. it changes how much you invest in validation before launch versus iterating in production."><summary class="acc-q"><span>How much does current accuracy matter vs. future improvement?</span><span class="material-symbols-rounded acc-chevron" aria-hidden="true">expand_more</span></summary><div class="acc-a">Decide up front. It changes how much you invest in validation before launch versus iterating in production.</div></details><details class="acc-item" data-item="" data-q="how much business complexity should we expect to grow into? anticipated complexity drives how much you invest in the semantic layer and business context graph now."><summary class="acc-q"><span>How much business complexity should we expect to grow into?</span><span class="material-symbols-rounded acc-chevron" aria-hidden="true">expand_more</span></summary><div class="acc-a">Anticipated complexity drives how much you invest in the semantic layer and business context graph now.</div></details><details class="acc-item" data-item="" data-q="how technical is the intended audience? a more technical audience tolerates raw fields and caveats; a business audience needs governed, unambiguous answers."><summary class="acc-q"><span>How technical is the intended audience?</span><span class="material-symbols-rounded acc-chevron" aria-hidden="true">expand_more</span></summary><div class="acc-a">A more technical audience tolerates raw fields and caveats; a business audience needs governed, unambiguous answers.</div></details><details class="acc-item" data-item="" data-q="what's our budget for accuracy? adversarial validation buys about +6% accuracy but costs +32% tokens and +72% latency. decide whether that trade is worth it per domain."><summary class="acc-q"><span>What's our budget for accuracy?</span><span class="material-symbols-rounded acc-chevron" aria-hidden="true">expand_more</span></summary><div class="acc-a">Adversarial validation buys about +6% accuracy but costs +32% tokens and +72% latency. Decide whether that trade is worth it per domain.</div></details><details class="acc-item" data-item="" data-q="how comfortable are we with data access controls? your comfort with access controls sets the boundary of what the agent may read — and shapes the safeguards you need."><summary class="acc-q"><span>How comfortable are we with data access controls?</span><span class="material-symbols-rounded acc-chevron" aria-hidden="true">expand_more</span></summary><div class="acc-a">Your comfort with access controls sets the boundary of what the agent may read — and shapes the safeguards you need.</div></details></div>
+</main>
+
+  <script src="../data/data.js"></script>
+  <script src="../assets/shell.js"></script>
+  <script src="../assets/app.js"></script>
+<p class="lang-alt-link" style="text-align:center;padding:12px;"><a href="/playbook.html" hreflang="zh-Hant" rel="alternate" lang="zh-Hant">中文版</a></p>
+</body>
+</html>

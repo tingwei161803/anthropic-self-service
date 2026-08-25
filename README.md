@@ -20,7 +20,7 @@
 
 - 🧭 **多頁面架構** — 一個 hub 首頁 + 7 個主題頁,每頁有獨立 URL、各自的 SEO 與 JSON-LD
 - 🎨 **8 種版型,適材適所** — hub 總覽、bento 重點磚牆、timeline 時間軸、gallery 卡片牆、scrollytelling 捲動敘事、dashboard 圖表儀表板、FAQ 手風琴、article 長文
-- 🌏 **全頁雙語切換** — 中文 / English 一鍵切換,整站(含導覽、頁尾、卡片、詳情)即時重繪,跨頁記憶語言
+- 🌏 **一個語言一個網址** — 中文在 `/`、English 在 `/en/`,每一頁的兩種語言各有自己的網址與靜態內容,兩邊互相標註 `hreflang`;右上角的語言切換是真正的連結,會停在同一頁而不是回首頁
 - 🌗 **深色 / 淺色模式** — 手動切換並透過 `localStorage` 跨頁記憶
 - 🔍 **即時搜尋 + 分類篩選** — 「真實來源」卡片牆可依關鍵字與「結構 / 知識」分類過濾
 - 🗂️ **彈出詳情 + 深連結** — 卡片點開為對話框,網址帶 `#<slug>`,可直接分享、鍵盤可操作
@@ -44,9 +44,10 @@ anthropic-self-service/
 ├── validation.html     # 驗證(dashboard:評測 + 消融實驗)
 ├── playbook.html       # 上手策略(FAQ 手風琴)
 ├── conclusion.html     # 結論(article:核心金句 + 原文連結)
+├── en/                 # 以上八頁的英文版,檔名一一對應
 ├── assets/
 │   ├── styles.css      # Material Design 3 設計 token(深/淺色)+ 版型樣式
-│   ├── shell.js        # 共用 chrome:appbar / 跨頁導覽 / footer / dialog / 語言+主題
+│   ├── shell.js        # 共用 chrome:appbar / 跨頁導覽 / footer / dialog / 主題
 │   └── app.js          # 版型引擎:依 data-page 選 renderer 渲染進 #page
 ├── data/
 │   └── data.js         # 唯一資料檔:SITE_META + SITE_PAGES[](每頁一筆,全雙語)
@@ -85,7 +86,7 @@ uv run --with playwright playwright install chromium      # 首次
 
 搭配自訂的 Playwright 腳本可跑上述檢查。
 
-驗收會自動偵測多頁面,逐頁檢查標題、內容渲染、語言/主題切換、搜尋/篩選/對話框/深連結、375px 響應式、a11y 與 console 無錯誤,並驗「跨頁 nav 皆 200」「語言跨頁持久」。
+驗收會自動偵測多頁面,逐頁檢查標題、內容渲染、主題切換、搜尋/篩選/對話框/深連結、375px 響應式、a11y 與 console 無錯誤,並驗「跨頁 nav 皆 200」「兩種語言的網址都直接回 200、內容語言與 `<html lang>` 一致」。
 
 ---
 

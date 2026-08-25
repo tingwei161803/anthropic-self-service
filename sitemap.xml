@@ -5,13 +5,37 @@
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://anthropic-self-service.peteraim.com/</loc>
+  </url>
+  <url>
     <loc>https://anthropic-self-service.peteraim.com/challenge.html</loc>
   </url>
   <url>
     <loc>https://anthropic-self-service.peteraim.com/conclusion.html</loc>
   </url>
   <url>
-    <loc>https://anthropic-self-service.peteraim.com/</loc>
+    <loc>https://anthropic-self-service.peteraim.com/en/</loc>
+  </url>
+  <url>
+    <loc>https://anthropic-self-service.peteraim.com/en/challenge.html</loc>
+  </url>
+  <url>
+    <loc>https://anthropic-self-service.peteraim.com/en/conclusion.html</loc>
+  </url>
+  <url>
+    <loc>https://anthropic-self-service.peteraim.com/en/playbook.html</loc>
+  </url>
+  <url>
+    <loc>https://anthropic-self-service.peteraim.com/en/skills.html</loc>
+  </url>
+  <url>
+    <loc>https://anthropic-self-service.peteraim.com/en/sources.html</loc>
+  </url>
+  <url>
+    <loc>https://anthropic-self-service.peteraim.com/en/stack.html</loc>
+  </url>
+  <url>
+    <loc>https://anthropic-self-service.peteraim.com/en/validation.html</loc>
   </url>
   <url>
     <loc>https://anthropic-self-service.peteraim.com/playbook.html</loc>
