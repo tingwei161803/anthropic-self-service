@@ -11,10 +11,11 @@
   </script>
 
   <meta charset="UTF-8" />
+  <script>try{var t=localStorage.getItem("theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>驗證 · 用 Claude 打造自助式數據分析</title>
-  <meta name="description" content="信任來自量測。一項消融實驗甚至顯示,直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構,而不是存取權。" />
-  <meta name="theme-color" content="#6750A4" />
+  <meta name="description" content="信任來自量測。一項消融實驗甚至顯示，直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構，而不是存取權。" />
+  <meta name="theme-color" content="#FBFCFD" />
   <link rel="canonical" href="https://anthropic-self-service.peteraim.com/validation.html" />
   <link rel="alternate" hreflang="zh-Hant" href="https://anthropic-self-service.peteraim.com/validation.html" />
   <link rel="alternate" hreflang="en" href="https://anthropic-self-service.peteraim.com/en/validation.html" />
@@ -24,7 +25,7 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="用 Claude 打造自助式數據分析" />
   <meta property="og:title" content="驗證 · 用 Claude 打造自助式數據分析" />
-  <meta property="og:description" content="信任來自量測。一項消融實驗甚至顯示,直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構,而不是存取權。" />
+  <meta property="og:description" content="信任來自量測。一項消融實驗甚至顯示，直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構，而不是存取權。" />
   <meta property="og:url" content="https://anthropic-self-service.peteraim.com/validation.html" />
   <meta property="og:image" content="https://anthropic-self-service.peteraim.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -36,22 +37,21 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="驗證 · 用 Claude 打造自助式數據分析" />
-  <meta name="twitter:description" content="信任來自量測。一項消融實驗甚至顯示,直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構,而不是存取權。" />
+  <meta name="twitter:description" content="信任來自量測。一項消融實驗甚至顯示，直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構，而不是存取權。" />
   <meta name="twitter:image" content="https://anthropic-self-service.peteraim.com/assets/og-image.png" />
   <meta name="twitter:image:alt" content="Self-Service Analytics with Claude — 21% to 95% accuracy once Skills were added (unofficial visual summary)" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,400..700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles.css" />
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"驗證 · 用 Claude 打造自助式數據分析","url":"https://anthropic-self-service.peteraim.com/validation.html","description":"信任來自量測。一項消融實驗甚至顯示,直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構,而不是存取權。","isPartOf":{"@type":"WebSite","name":"用 Claude 打造自助式數據分析","url":"https://anthropic-self-service.peteraim.com/"},"isBasedOn":"https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude","inLanguage":["zh-Hant"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"驗證 · 用 Claude 打造自助式數據分析","url":"https://anthropic-self-service.peteraim.com/validation.html","description":"信任來自量測。一項消融實驗甚至顯示，直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構，而不是存取權。","isPartOf":{"@type":"WebSite","name":"用 Claude 打造自助式數據分析","url":"https://anthropic-self-service.peteraim.com/"},"isBasedOn":"https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude","inLanguage":["zh-Hant"]}</script>
 </head>
 <body data-page="validation">
   <!-- shell.js injects the app bar, cross-page nav, footer and dialog around this -->
   <main id="page">
-<header class="page-head"><h1>驗證</h1><p class="page-head__sub">信任來自量測。一項消融實驗甚至顯示,直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構,而不是存取權。</p></header><div class="stat-grid"><div class="stat-card" data-item=""><span class="stat-label">整體準確率</span><b class="stat-value">95%</b></div><div class="stat-card" data-item=""><span class="stat-label">對抗式複查 → 準確率</span><b class="stat-value">+6%</b></div><div class="stat-card" data-item=""><span class="stat-label">對抗式複查 → token</span><b class="stat-value">+32%</b></div><div class="stat-card" data-item=""><span class="stat-label">對抗式複查 → 延遲</span><b class="stat-value">+72%</b></div></div><div class="panel-grid"><figure class="panel" data-item=""><figcaption>對抗式複查的代價</figcaption><div class="chart-wrap"><svg viewBox="0 0 520 240" role="img" preserveAspectRatio="xMidYMid meet" aria-label="bar chart"><line class="axis-line" x1="16" y1="196" x2="504" y2="196"></line><rect class="bar-rect" x="16" y="181" width="153.33" height="15" rx="5"><title>準確率提升: 6</title></rect><text class="bar-value" x="92.67" y="175" text-anchor="middle">6</text><text class="bar-label" x="92.67" y="214" text-anchor="middle">準確率提升</text><rect class="bar-rect" x="183.33" y="116" width="153.33" height="80" rx="5"><title>額外 token: 32</title></rect><text class="bar-value" x="260" y="110" text-anchor="middle">32</text><text class="bar-label" x="260" y="214" text-anchor="middle">額外 token</text><rect class="bar-rect" x="350.67" y="16" width="153.33" height="180" rx="5"><title>額外延遲: 72</title></rect><text class="bar-value" x="427.33" y="10" text-anchor="middle">72</text><text class="bar-label" x="427.33" y="214" text-anchor="middle">額外延遲</text></svg></div></figure></div><div class="panel panel--wide" data-item=""><div class="table-wrap"><table class="data-table"><thead><tr><th>方法</th><th>作用</th><th>類型</th></tr></thead><tbody><tr data-item=""><td>以儀表板為基礎的評測</td><td>自動產生、人工驗證的標準答案</td><td>離線</td></tr><tr data-item=""><td>長尾評測</td><td>由 LLM 依業務脈絡產生</td><td>離線</td></tr><tr data-item=""><td>消融測試</td><td>找出真正影響準確率的元件</td><td>離線</td></tr><tr data-item=""><td>對抗式複查</td><td>再跑一次、對答案提出批判</td><td>線上</td></tr><tr data-item=""><td>來源出處註腳</td><td>標示資料來源層級與新鮮度</td><td>線上</td></tr><tr data-item=""><td>修正回收</td><td>把使用者的更正轉成自動化 PR</td><td>線上</td></tr></tbody></table></div></div>
+<header class="page-head"><span class="page-head__n">05 / 07</span><h1>驗證</h1><p class="page-head__sub">信任來自量測。一項消融實驗甚至顯示，直接給 SQL 存取權也沒有幫助 —— 瓶頸是結構，而不是存取權。</p></header><div class="readouts"><div class="readout" data-item=""><b>95<span class="meter__unit">%</span></b><span>整體準確率</span></div><div class="readout" data-item=""><b>+6<span class="meter__unit">%</span></b><span>對抗式複查 → 準確率</span></div><div class="readout" data-item=""><b>+32<span class="meter__unit">%</span></b><span>對抗式複查 → token</span></div><div class="readout" data-item=""><b>+72<span class="meter__unit">%</span></b><span>對抗式複查 → 延遲</span></div></div><div class="panel-grid"><figure class="panel" data-item=""><figcaption>對抗式複查的代價</figcaption><div class="hbars"><div class="hbar hbar--gain" data-item=""><span class="hbar__label">準確率提升</span><span class="hbar__track" aria-hidden="true"><span class="hbar__fill" style="width:6%"></span></span><b class="hbar__v">+6%</b></div><div class="hbar hbar--cost" data-item=""><span class="hbar__label">額外 token</span><span class="hbar__track" aria-hidden="true"><span class="hbar__fill" style="width:32%"></span></span><b class="hbar__v">+32%</b></div><div class="hbar hbar--cost" data-item=""><span class="hbar__label">額外延遲</span><span class="hbar__track" aria-hidden="true"><span class="hbar__fill" style="width:72%"></span></span><b class="hbar__v">+72%</b></div><div class="hbar__axis" aria-hidden="true"><span></span><span><span>0</span><span>50</span><span>100%</span></span><span></span></div></div></figure></div><div class="panel panel--wide" data-item=""><h2 class="panel__title">怎麼量測</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>方法</th><th>作用</th><th>類型</th></tr></thead><tbody><tr data-item=""><td>以儀表板為基礎的評測</td><td>自動產生、人工驗證的標準答案</td><td><span class="pill">離線</span></td></tr><tr data-item=""><td>長尾評測</td><td>由 LLM 依業務脈絡產生</td><td><span class="pill">離線</span></td></tr><tr data-item=""><td>消融測試</td><td>找出真正影響準確率的元件</td><td><span class="pill">離線</span></td></tr><tr data-item=""><td>對抗式複查</td><td>再跑一次、對答案提出批判</td><td><span class="pill pill--online">線上</span></td></tr><tr data-item=""><td>來源出處註腳</td><td>標示資料來源層級與新鮮度</td><td><span class="pill pill--online">線上</span></td></tr><tr data-item=""><td>修正回收</td><td>把使用者的更正轉成自動化 PR</td><td><span class="pill pill--online">線上</span></td></tr></tbody></table></div></div>
 </main>
 
   <script src="data/data.js"></script>

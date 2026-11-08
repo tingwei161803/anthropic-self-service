@@ -35,10 +35,53 @@
     var teardowns = [];   // observers / listeners to disconnect before each repaint
 
     /* ---------- shared bits ---------- */
+    var icon = L.icon || function () { return ""; };
     function head(p) {
+      var n = L.pageNum ? L.pageNum(p) : "";
+      var total = L.pages.length - 1;
       var sub = t(p.subtitle)
         ? '<p class="page-head__sub">' + esc(t(p.subtitle)) + "</p>" : "";
-      return '<header class="page-head"><h1>' + esc(t(p.title)) + "</h1>" + sub + "</header>";
+      return '<header class="page-head">' +
+        (n ? '<span class="page-head__n">' + n + " / " + (total < 10 ? "0" : "") + total + "</span>" : "") +
+        "<h1>" + esc(t(p.title)) + "</h1>" + sub + "</header>";
+    }
+    function txt(en, zh) { return L.state.lang === "en" ? en : zh; }
+    /* "95%" -> 95<span>%</span>: the unit stays on the number's baseline */
+    function numUnit(v) {
+      var s = String(t(v)), m = s.match(/^([+~]?\d+(?:\.\d+)?)(%\+?)?$/);
+      if (!m) return esc(s);
+      return esc(m[1]) + (m[2] ? '<span class="meter__unit">' + esc(m[2]) + "</span>" : "");
+    }
+    function ticks() {
+      return [25, 50, 75].map(function (v) { return '<i class="tick" style="left:' + v + '%"></i>'; }).join("");
+    }
+    function scaleRow(cls) {
+      return '<div class="' + cls + '" aria-hidden="true"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>';
+    }
+    /* skills gauge: which stage a step puts the gauge in. Only the two numbers
+       the essay reports (21% and 95%) are ever drawn — the steps in between
+       show a hatched "being built" band instead of an invented score. */
+    function gaugeState(p, i) {
+      var s = (p.steps || [])[i], v = (s && s.visual) || {};
+      var home = pageBySlug("home"), hero = (home && home.hero) || {};
+      var raw = t(v.value);
+      if (v.type === "bars") {
+        var b = v.bars || [];
+        var lo = b[0] ? b[0].value : 21, hi = b[1] ? b[1].value : 95;
+        return { stage: "compare",
+          readout: '<span class="g-from">' + numUnit(lo + "%") + '</span><span class="g-arrow" aria-hidden="true">→</span><span class="g-to">' + numUnit(hi + "%") + "</span>",
+          caption: b.map(function (x) { return t(x.label) + " " + x.value + "%"; }).join(txt(" vs. ", "，對比 ")) };
+      }
+      if (/^\d+%/.test(raw)) {
+        var pct = parseFloat(raw);
+        return { stage: pct < 50 ? "guess" : "governed", readout: numUnit(raw),
+          caption: t(pct < 50 ? (hero.from || {}).label : (hero.to || {}).label) };
+      }
+      return { stage: "build", readout: esc(raw), text: true,
+        caption: txt("Skills are being added. The post reports no in-between score.", "正在加入 Skills。原文沒有公布中間階段的分數。") };
+    }
+    function pageBySlug(slug) {
+      return L.pages.filter(function (q) { return q.slug === slug; })[0] || null;
     }
 
     function barChart(series, accent) {
@@ -90,23 +133,67 @@
        ===================================================================== */
     var RENDERERS = {
 
-      /* ---- hub: hero stats + a card linking to every other page ---- */
+      /* ---- hub: the accuracy meter, the four-layer stack, the reading path ---- */
       hub: function (p) {
-        var stats = (p.stats || []).map(function (s) {
-          return '<div class="hero__stat" data-item>' +
-            '<b class="hero__stat-value" data-count="' + esc(String(s.value)) + '">0</b>' +
-            '<span class="hero__stat-label">' + esc(t(s.label)) + "</span></div>";
+        var h = p.hero || {};
+        var from = h.from || { value: 0 }, to = h.to || { value: 100 };
+        var span = to.value - from.value;
+
+        /* the meter: static HTML already shows the final state (no-JS, crawlers) */
+        var meter = '<figure class="meter" id="heroMeter" data-from="' + from.value + '" data-to="' + to.value + '">' +
+          '<figcaption class="meter__label">' + esc(t(h.meterLabel)) + "</figcaption>" +
+          '<p class="meter__readout" aria-label="' + from.value + "% → " + to.value + '%">' +
+            '<span class="meter__from" aria-hidden="true"><span class="num">' + from.value + '</span><span class="meter__unit">%</span></span>' +
+            '<span class="meter__arrow" aria-hidden="true">→</span>' +
+            '<span class="meter__to" aria-hidden="true"><span class="num" id="meterNum">' + to.value + '</span><span class="meter__unit">%</span></span>' +
+          "</p>" +
+          '<div class="meter__track" aria-hidden="true">' + ticks() +
+            '<div class="meter__fill meter__fill--guess" style="width:' + from.value + '%"></div>' +
+            '<div class="meter__fill meter__fill--gov" id="meterGov" style="left:' + from.value + "%;width:" + span + '%"></div>' +
+            '<span class="meter__pin meter__pin--to" style="right:' + (100 - to.value) + '%"><b>' + to.value + "%+</b><span>" + esc(t(to.label)) + "</span></span>" +
+            '<span class="meter__pin meter__pin--from" style="left:' + from.value + '%"><b>' + from.value + "%</b><span>" + esc(t(from.label)) + "</span></span>" +
+          "</div>" + scaleRow("meter__scale") +
+        "</figure>";
+
+        var cellLines = (h.cell && (h.cell[L.state.lang] || h.cell.en)) || [];
+        var cell = cellLines.length ?
+          '<pre class="cell" aria-label="' + esc(txt("The question behind the essay", "這篇文章要解決的問題")) + '">' +
+            '<span class="cell__prompt" aria-hidden="true">In [1]:</span><code>' + esc(cellLines.join("\n")) + "</code></pre>" : "";
+        var notes = (p.stats || []).map(function (s) {
+          return "<div><dt>" + numUnit(s.value) + "</dt><dd>" + esc(t(s.label)) + "</dd></div>";
         }).join("");
-        var cards = L.pages.filter(function (q) { return q.slug !== "home"; }).map(function (q) {
-          return '<a class="card card--nav" data-item href="' + esc(L.pageHref(q)) + '" ' +
-              'aria-label="' + esc(t(q.title)) + '">' +
-            '<span class="material-symbols-rounded card__icon" aria-hidden="true">' + esc(q.icon || "label") + "</span>" +
-            '<h3 class="card__title">' + esc(t(q.title)) + "</h3>" +
-            '<p class="card__summary">' + esc(t(q.subtitle)) + "</p></a>";
+
+        var stackPage = pageBySlug("stack");
+        var slabs = (p.layers || []).map(function (ly, i) {
+          return '<li><a class="slab' + (i === 2 ? " slab--key" : "") + '" href="' + esc(ly.href) + '">' +
+            '<span class="slab__n">L' + (i + 1) + "</span>" +
+            '<span class="slab__t">' + esc(t(ly.title)) + "</span>" +
+            '<span class="slab__note">' + esc(t(ly.note)) + "</span></a></li>";
         }).join("");
-        return head(p) +
-          (stats ? '<div class="hero__stats">' + stats + "</div>" : "") +
-          '<div class="grid">' + cards + "</div>";
+
+        var path = L.pages.filter(function (q) { return q.slug !== "home"; }).map(function (q) {
+          return '<li><a href="' + esc(L.pageHref(q)) + '">' +
+            '<span class="path__n">' + L.pageNum(q) + "</span>" +
+            '<span class="path__t">' + esc(t(q.title)) + "</span>" +
+            '<span class="path__s">' + esc(t(q.subtitle)) + "</span></a></li>";
+        }).join("");
+
+        return '<section class="hero" aria-labelledby="heroTitle">' +
+            '<h1 class="hero__title" id="heroTitle">' + esc(t(h.title) || t(p.title)) + "</h1>" +
+            '<p class="hero__lede">' + esc(t(p.subtitle)) + "</p>" +
+            meter +
+            '<div class="hero__foot">' + cell + (notes ? '<dl class="notes">' + notes + "</dl>" : "") + "</div>" +
+          "</section>" +
+          (slabs ? '<section class="home-stack" aria-labelledby="stackTitle"><div>' +
+            '<h2 class="section-title" id="stackTitle">' + esc(stackPage ? t(stackPage.title) : "") + "</h2>" +
+            '<p class="section-sub">' + esc(stackPage ? t(stackPage.subtitle) : "") + " " +
+              esc(txt("Skills is the layer that moved accuracy from 21% to 95%.", "其中 Skills 這一層，把準確率從 21% 推到 95%。")) + "</p>" +
+            (stackPage ? '<a class="cta-link" href="' + esc(L.pageHref(stackPage)) + '">' + esc(txt("See all four layers", "看四層的細節")) + "</a>" : "") +
+            '</div><ol class="slabs">' + slabs + "</ol></section>" : "") +
+          '<section class="home-path" aria-labelledby="pathTitle">' +
+            '<h2 class="section-title" id="pathTitle">' + esc(txt("Read it in order", "依序閱讀")) + "</h2>" +
+            '<p class="section-sub">' + esc(txt("Seven short pages, from the failure modes to the takeaway.", "七個短頁，從失敗模式讀到結論。")) + "</p>" +
+            '<ol class="path">' + path + "</ol></section>";
       },
 
       /* ---- gallery: search + chips + card grid + dialog ---- */
@@ -139,7 +226,7 @@
             if (b.type === "code") return "<pre><code>" + esc(t(b.text)) + "</code></pre>";
             if (b.type === "link") return '<p class="prose-cta"><a class="cta-link" href="' + esc(b.url) +
               '" target="_blank" rel="noopener">' + esc(t(b.text)) +
-              ' <span class="material-symbols-rounded" aria-hidden="true">open_in_new</span></a></p>';
+              " " + icon("external") + "</a></p>";
             if (b.type === "ul") {
               var arr = (b.items && (b.items[L.state.lang] || b.items.en || b.items.zh)) || [];
               return "<ul>" + arr.map(function (li) { return "<li>" + esc(li) + "</li>"; }).join("") + "</ul>";
@@ -147,31 +234,40 @@
             return "<p>" + esc(t(b.text)) + "</p>";
           }).join("");
           return '<section class="article-section" id="' + esc(s.id) + '" data-item ' +
-            'aria-labelledby="' + esc(s.id) + '-h"><h2 id="' + esc(s.id) + '-h">' + esc(t(s.heading)) + "</h2>" + blocks + "</section>";
+            'aria-labelledby="' + esc(s.id) + '-h"><h2 id="' + esc(s.id) + '-h">' + esc(t(s.heading)) + "</h2>" +
+            '<div class="nb nb-frame">' + blocks + "</div></section>";
         }).join("");
         return '<div class="reading-progress" id="readingProgress" aria-hidden="true"></div>' +
           head(p) +
           '<div class="article-layout">' +
-            '<nav class="toc" aria-label="Contents"><div class="toc__inner">' + toc + "</div></nav>" +
+            '<nav class="toc" aria-label="' + esc(txt("Contents", "目錄")) + '"><div class="toc__inner">' + toc + "</div></nav>" +
             '<div class="article-body prose">' + body + "</div>" +
           "</div>";
       },
 
       /* ---- dashboard: stat cards + bar + line + table ---- */
       dashboard: function (p) {
+        /* readouts: number and unit together, label underneath — one ruled row, not boxes */
         var stats = (p.stats || []).map(function (s) {
-          var d = s.delta;
-          var deltaHtml = (d === 0 || d) ?
-            '<span class="stat-delta stat-delta--' + (d >= 0 ? "up" : "down") + '">' +
-              (d >= 0 ? "▲ " : "▼ ") + esc(String(Math.abs(d))) + "%</span>" : "";
-          return '<div class="stat-card" data-item>' +
-            '<span class="stat-label">' + esc(t(s.label)) + "</span>" +
-            '<b class="stat-value">' + esc(String(s.value)) +
-              (t(s.unit) ? ' <span class="stat-unit">' + esc(t(s.unit)) + "</span>" : "") + "</b>" +
-            deltaHtml + "</div>";
+          var unit = t(s.unit);
+          return '<div class="readout" data-item><b>' + numUnit(s.value) + (unit ? " " + esc(unit) : "") + "</b>" +
+            "<span>" + esc(t(s.label)) + "</span></div>";
         }).join("");
-        var bars = p.bars ? '<figure class="panel" data-item><figcaption>' + esc(t(p.bars.title)) + "</figcaption>" +
-          '<div class="chart-wrap">' + barChart(p.bars.series || []) + "</div></figure>" : "";
+        /* horizontal bars on a shared 0-100% axis, gain vs cost coloured apart */
+        var bars = "";
+        if (p.bars) {
+          var rows = (p.bars.series || []).map(function (d) {
+            var v = Math.max(0, Math.min(100, Number(d.value) || 0));
+            return '<div class="hbar hbar--' + esc(d.tone || "plain") + '" data-item>' +
+              '<span class="hbar__label">' + esc(t(d.label)) + "</span>" +
+              '<span class="hbar__track" aria-hidden="true"><span class="hbar__fill" style="width:' + v + '%"></span></span>' +
+              '<b class="hbar__v">+' + esc(String(d.value)) + "%</b></div>";
+          }).join("");
+          bars = '<figure class="panel" data-item><figcaption>' + esc(t(p.bars.title)) + "</figcaption>" +
+            '<div class="hbars">' + rows +
+              '<div class="hbar__axis" aria-hidden="true"><span></span><span><span>0</span><span>50</span><span>100%</span></span><span></span></div>' +
+            "</div></figure>";
+        }
         var line = p.line ? '<figure class="panel" data-item><figcaption>' + esc(t(p.line.title)) + "</figcaption>" +
           '<div class="chart-wrap">' + lineChart(p.line.points || []) + "</div></figure>" : "";
         var table = "";
@@ -179,27 +275,32 @@
           var thead = (p.table.columns || []).map(function (c) { return "<th>" + esc(t(c.label)) + "</th>"; }).join("");
           var tbody = (p.table.rows || []).map(function (row) {
             return "<tr data-item>" + (p.table.columns || []).map(function (c) {
-              var v = row[c.key];
-              return "<td>" + esc(typeof v === "object" ? t(v) : String(v == null ? "" : v)) + "</td>";
+              var v = row[c.key], val = typeof v === "object" ? t(v) : String(v == null ? "" : v);
+              if (c.key === "type") {
+                var online = v && typeof v === "object" && v.en === "Online";
+                return '<td><span class="pill' + (online ? " pill--online" : "") + '">' + esc(val) + "</span></td>";
+              }
+              return "<td>" + esc(val) + "</td>";
             }).join("") + "</tr>";
           }).join("");
-          table = '<div class="panel panel--wide" data-item><div class="table-wrap"><table class="data-table">' +
+          table = '<div class="panel panel--wide" data-item><h2 class="panel__title">' + esc(txt("How they measure it", "怎麼量測")) + "</h2>" +
+            '<div class="table-wrap"><table class="data-table">' +
             "<thead><tr>" + thead + "</tr></thead><tbody>" + tbody + "</tbody></table></div></div>";
         }
         return head(p) +
-          '<div class="stat-grid">' + stats + "</div>" +
+          (stats ? '<div class="readouts">' + stats + "</div>" : "") +
           '<div class="panel-grid">' + bars + line + "</div>" + table;
       },
 
       /* ---- timeline: dated event cards down a rail ---- */
       timeline: function (p) {
-        var items = (p.events || []).map(function (ev) {
-          return '<li class="tl-item" data-item><div class="tl-dot" aria-hidden="true"></div>' +
-            '<div class="tl-card"><span class="tl-date">' + esc(t(ev.date)) + "</span>" +
-            '<h3 class="tl-title">' + esc(t(ev.title)) + "</h3>" +
-            '<p class="tl-body">' + esc(t(ev.body)) + "</p></div></li>";
+        var items = (p.events || []).map(function (ev, i) {
+          return '<li class="layer' + (ev.key ? " layer--key" : "") + '" id="layer-' + (i + 1) + '" data-item>' +
+            '<div class="layer__n"><b aria-hidden="true">' + (i < 9 ? "0" : "") + (i + 1) + "</b><span>" + esc(t(ev.date)) + "</span></div>" +
+            '<div class="layer__body"><h3>' + esc(t(ev.title)) + "</h3>" +
+            "<p>" + esc(t(ev.body)) + "</p></div></li>";
         }).join("");
-        return head(p) + '<ol class="timeline">' + items + "</ol>";
+        return head(p) + '<ol class="stack">' + items + "</ol>";
       },
 
       /* ---- table: searchable + sortable ---- */
@@ -216,14 +317,18 @@
 
       /* ---- bento: asymmetric tile grid ---- */
       bento: function (p) {
-        var tiles = (p.tiles || []).map(function (tile) {
-          return '<article class="tile tile--' + esc(tile.size || "sm") + (tile.accent ? " tile--accent" : "") + '" data-item>' +
-            (tile.icon ? '<span class="material-symbols-rounded tile__icon" aria-hidden="true">' + esc(tile.icon) + "</span>" : "") +
-            (tile.value ? '<b class="tile__value">' + esc(tile.value) + "</b>" : "") +
-            '<h3 class="tile__title">' + esc(t(tile.title)) + "</h3>" +
-            (t(tile.body) ? '<p class="tile__body">' + esc(t(tile.body)) + "</p>" : "") + "</article>";
+        /* the accent tile is the claim; the rest are the failure modes behind it */
+        var lead = (p.tiles || []).filter(function (x) { return x.accent; })[0];
+        var modes = (p.tiles || []).filter(function (x) { return !x.accent; });
+        var leadHtml = lead ? '<div class="lead-claim" data-item><h2>' + esc(t(lead.title)) + "</h2>" +
+          (t(lead.body) ? "<p>" + esc(t(lead.body)) + "</p>" : "") + "</div>" : "";
+        var modeHtml = modes.map(function (m, i) {
+          return '<article class="mode" data-item>' +
+            '<span class="mode__k">' + esc(txt("Failure mode ", "失敗模式 ")) + (i + 1) + "</span>" +
+            "<h3>" + esc(t(m.title)) + "</h3>" +
+            (t(m.body) ? "<p>" + esc(t(m.body)) + "</p>" : "") + "</article>";
         }).join("");
-        return head(p) + '<div class="bento">' + tiles + "</div>";
+        return head(p) + leadHtml + (modeHtml ? '<div class="modes">' + modeHtml + "</div>" : "");
       },
 
       /* ---- kanban: cards grouped by status column ---- */
@@ -246,16 +351,15 @@
       /* ---- faq: searchable accordion ---- */
       faq: function (p) {
         var items = (p.qa || []).map(function (row) {
-          return '<details class="acc-item" data-item data-q="' + esc((t(row.q) + " " + t(row.a)).toLowerCase()) + '">' +
-            '<summary class="acc-q"><span>' + esc(t(row.q)) + "</span>" +
-            '<span class="material-symbols-rounded acc-chevron" aria-hidden="true">expand_more</span></summary>' +
-            '<div class="acc-a">' + esc(t(row.a)) + "</div></details>";
+          return '<li><details class="acc-item" data-item data-q="' + esc((t(row.q) + " " + t(row.a)).toLowerCase()) + '">' +
+            '<summary class="acc-q"><span>' + esc(t(row.q)) + "</span>" + icon("plus") + "</summary>" +
+            '<div class="acc-a">' + esc(t(row.a)) + "</div></details></li>";
         }).join("");
         return head(p) +
           '<div class="toolbar"><input id="search" class="search" type="search" autocomplete="off" ' +
             'placeholder="' + (L.state.lang === "en" ? "Search…" : "搜尋…") + '" ' +
             'aria-label="' + (L.state.lang === "en" ? "Search" : "搜尋") + '" /></div>' +
-          '<div class="accordion" id="accordion">' + items + "</div>";
+          '<ol class="accordion" id="accordion">' + items + "</ol>";
       },
 
       /* ---- comparison: plans (cols) x features (rows) ---- */
@@ -271,7 +375,7 @@
           var cells = plans.map(function (pl) {
             var v = f.values ? f.values[pl.key] : undefined;
             var cell;
-            if (v === true) cell = '<span class="cmp-yes material-symbols-rounded" aria-label="yes">check</span>';
+            if (v === true) cell = '<span class="cmp-yes" aria-label="yes">✓</span>';
             else if (v === false || v == null) cell = '<span class="cmp-no" aria-label="no">—</span>';
             else cell = esc(t(v));
             return '<td class="' + (pl.highlight ? "cmp-col--hl" : "") + '">' + cell + "</td>";
@@ -297,12 +401,33 @@
       /* ---- scrolly: sticky visual + stepped narrative ---- */
       scrolly: function (p) {
         var steps = (p.steps || []).map(function (s, i) {
-          return '<div class="scrolly-step" data-item data-step="' + i + '"><p>' + esc(t(s.text)) + "</p></div>";
+          return '<li class="scrolly-step' + (i === 0 ? " scrolly-step--active" : "") + '" data-item data-step="' + i + '">' +
+            '<span class="scrolly-step__n" aria-hidden="true">' + (i + 1) + "</span>" +
+            "<p>" + esc(t(s.text)) + "</p></li>";
         }).join("");
+        var bars = [];
+        (p.steps || []).forEach(function (s) { if (s.visual && s.visual.bars) bars = s.visual.bars; });
+        var lo = bars[0] ? bars[0].value : 21, hi = bars[1] ? bars[1].value : 95;
+        var first = gaugeState(p, 0);
         return head(p) +
           '<div class="scrolly">' +
-            '<div class="scrolly-sticky"><div class="scrolly-visual" id="scrollyVisual"></div></div>' +
-            '<div class="scrolly-steps">' + steps + "</div>" +
+            '<div class="scrolly-sticky">' +
+              '<figure class="gauge" id="scrollyVisual" data-stage="' + first.stage + '">' +
+                '<figcaption class="gauge__label"><span>' + esc(txt("Aggregate accuracy", "整體準確率")) + "</span>" +
+                  '<span class="gauge__step" id="gaugeStep">1 / ' + (p.steps || []).length + "</span></figcaption>" +
+                '<p class="gauge__readout' + (first.text ? " gauge__readout--text" : "") + '" id="gaugeReadout" aria-live="polite">' + first.readout + "</p>" +
+                '<div class="gauge__track" aria-hidden="true">' + ticks() +
+                  '<div class="gauge__fill gauge__fill--guess" style="width:' + lo + '%"></div>' +
+                  '<div class="gauge__fill gauge__fill--build" style="left:' + lo + "%;width:" + (hi - lo) + '%"></div>' +
+                  '<div class="gauge__fill gauge__fill--gov" style="left:' + lo + '%"></div>' +
+                "</div>" +
+                '<div class="gauge__pins" aria-hidden="true"><span class="pin-from" style="left:' + lo + '%">' + lo + "% " + esc(bars[0] ? t(bars[0].label) : "") + "</span>" +
+                  '<span class="pin-to" style="right:' + (100 - hi) + '%">' + hi + "%+</span></div>" +
+                scaleRow("gauge__scale") +
+                '<p class="gauge__caption" id="gaugeCaption">' + esc(first.caption) + "</p>" +
+              "</figure>" +
+            "</div>" +
+            '<ol class="scrolly-steps">' + steps + "</ol>" +
           "</div>";
       },
 
@@ -320,7 +445,7 @@
        WIRING (interactions) — keyed by layout, run after innerHTML is set
        ===================================================================== */
     var WIRE = {
-      hub: function () { animateCounters(); },
+      hub: function () { animateMeter(); },
 
       gallery: function (p) {
         var grid = document.getElementById("grid");
@@ -340,12 +465,13 @@
           grid.innerHTML = rows.map(function (item) {
             var tags = (item.tags || []).map(function (g) { return '<span class="tag">' + esc(g) + "</span>"; }).join("");
             return '<article class="card" tabindex="0" role="button" data-item data-slug="' + esc(item.slug) + '" ' +
-              'aria-label="' + esc(t(item.title)) + '">' +
+              'data-cat="' + esc(item.category || "") + '" aria-label="' + esc(t(item.title)) + '" aria-haspopup="dialog">' +
+              '<span class="card__file" aria-hidden="true">' + esc(item.slug) + "</span>" +
               '<h3 class="card__title">' + esc(t(item.title)) + "</h3>" +
               '<p class="card__summary">' + esc(t(item.summary)) + "</p>" +
               (tags ? '<div class="card__tags">' + tags + "</div>" : "") + "</article>";
           }).join("");
-          if (count) count.textContent = rows.length + (L.state.lang === "en" ? " result(s)" : " 筆結果");
+          if (count) count.textContent = rows.length + " / " + (p.items || []).length + (L.state.lang === "en" ? " references" : " 份參考");
           wireCards();
         }
         function wireCards() {
@@ -553,16 +679,20 @@
 
       scrolly: function (p) {
         var visual = document.getElementById("scrollyVisual");
+        var readout = document.getElementById("gaugeReadout");
+        var caption = document.getElementById("gaugeCaption");
+        var stepLbl = document.getElementById("gaugeStep");
         var steps = [].slice.call(pageEl.querySelectorAll(".scrolly-step"));
+        var current = -1;
         function paintVisual(i) {
-          var s = (p.steps || [])[i]; if (!s) return;
-          var v = s.visual || {};
-          if (v.type === "bars") {
-            visual.innerHTML = '<div class="chart-wrap">' + barChart(v.bars || [], v.color) + "</div>";
-          } else {
-            visual.innerHTML = '<div class="scrolly-stat" style="color:' + esc(v.color || "var(--primary)") + '">' +
-              esc(t(v.value)) + "</div>";
-          }
+          if (i === current || !(p.steps || [])[i]) return;
+          current = i;
+          var g = gaugeState(p, i);
+          visual.setAttribute("data-stage", g.stage);
+          readout.innerHTML = g.readout;
+          readout.classList.toggle("gauge__readout--text", !!g.text);
+          if (caption) caption.textContent = g.caption || "";
+          if (stepLbl) stepLbl.textContent = (i + 1) + " / " + steps.length;
         }
         paintVisual(0);
         if ("IntersectionObserver" in window) {
@@ -574,7 +704,7 @@
                 paintVisual(parseInt(en.target.dataset.step, 10) || 0);
               }
             });
-          }, { rootMargin: "-45% 0px -45% 0px" });
+          }, { rootMargin: window.innerWidth < 960 ? "-55% 0px -35% 0px" : "-45% 0px -45% 0px" });
           steps.forEach(function (s) { io.observe(s); });
           teardowns.push(function () { io.disconnect(); });
         }
@@ -616,26 +746,32 @@
       }
     };
 
-    /* ---- hero count-up (shared by hub) ---- */
-    function animateCounters() {
-      var els = [].slice.call(pageEl.querySelectorAll(".hero__stat-value[data-count]"));
-      if (!els.length) return;
-      function run(el) {
-        var target = parseFloat(el.dataset.count) || 0, dur = 1000, start = null;
-        function step(ts) {
-          if (start === null) start = ts;
-          var pr = Math.min(1, (ts - start) / dur), eased = 1 - Math.pow(1 - pr, 3);
-          el.textContent = String(Math.round(target * eased));
-          if (pr < 1) requestAnimationFrame(step); else el.textContent = String(target);
-        }
-        requestAnimationFrame(step);
+    /* ---- hero meter: one orchestrated moment on load ----
+       The markup already shows the final 95%. With motion allowed, the blue
+       fill starts at the 21% mark and the readout counts up with it. */
+    function animateMeter() {
+      var meter = document.getElementById("heroMeter");
+      var num = document.getElementById("meterNum");
+      var gov = document.getElementById("meterGov");
+      if (!meter || !num || !gov) return;
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce || !window.requestAnimationFrame) return;
+      var from = parseFloat(meter.dataset.from) || 0, to = parseFloat(meter.dataset.to) || 0;
+      var finalW = gov.style.width;
+      gov.style.transition = "none";
+      gov.style.width = "0%";
+      num.textContent = String(from);
+      void gov.offsetWidth;   /* commit the start frame before animating */
+      gov.style.transition = "";
+      var dur = 1400, start = null;
+      requestAnimationFrame(function () { gov.style.width = finalW; });
+      function step(ts) {
+        if (start === null) start = ts;
+        var pr = Math.min(1, (ts - start) / dur), eased = 1 - Math.pow(1 - pr, 3);
+        num.textContent = String(Math.round(from + (to - from) * eased));
+        if (pr < 1) requestAnimationFrame(step); else num.textContent = String(to);
       }
-      if (!("IntersectionObserver" in window)) { els.forEach(run); return; }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) { run(en.target); io.unobserve(en.target); } });
-      }, { threshold: 0.4 });
-      els.forEach(function (el) { io.observe(el); });
-      teardowns.push(function () { io.disconnect(); });
+      requestAnimationFrame(step);
     }
 
     /* =====================================================================
