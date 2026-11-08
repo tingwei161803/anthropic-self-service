@@ -22,6 +22,15 @@ window.SITE_META = {
     en: "How Anthropic turned its data warehouse into a 95%-accurate self-service analyst — an unofficial visual summary.",
     zh: "Anthropic 如何把資料倉儲變成 95% 準確率的自助分析師 —— 非官方視覺化整理。"
   },
+  /* shown under the top bar on every page: this is a summary, not the source */
+  notice: {
+    en: "Figures and claims come from Anthropic’s engineering post; check the original before you cite them.",
+    zh: "數據與論點都出自 Anthropic 的工程部落格文章，引用前請以原文為準。"
+  },
+  source: {
+    url: "https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude",
+    label: { en: "Read the original", zh: "閱讀原文" }
+  },
   footer: {
     en: "Unofficial summary of Anthropic's engineering blog.",
     zh: "Anthropic 工程部落格的非官方整理。"
@@ -35,13 +44,43 @@ window.SITE_PAGES = [
     slug: "home", layout: "hub", icon: "insights",
     title: { en: "Overview", zh: "總覽" },
     subtitle: {
-      en: "Pick a section. Every page shares this nav, language and theme.",
-      zh: "選一個區段。所有頁面共用導覽、語言與主題。"
+      en: "Same model, same data — the difference is structure. How Anthropic took its analytics agent from 21% to 95% accuracy.",
+      zh: "同樣的模型、同樣的資料，差別在結構。Anthropic 如何把分析代理的準確率從 21% 拉到 95%。"
     },
+    /* hero: the accuracy meter is the whole story in one picture */
+    hero: {
+      title: { en: "From guess to governed", zh: "從猜測到治理" },
+      meterLabel: { en: "Aggregate accuracy of the analytics agent", zh: "分析代理的整體準確率" },
+      from: { value: 21, label: { en: "Without Skills: the agent guesses at structure", zh: "沒有 Skills：代理只能猜測結構" } },
+      to:   { value: 95, label: { en: "With Skills: governed answers", zh: "加入 Skills：治理化的答案" } },
+      /* the question the essay is about, written as notebook comments */
+      cell: {
+        en: ["-- “How many active users do we have?”",
+             "-- Which table? Which filters? What lookback window?",
+             "-- Guess the mapping: 21%",
+             "-- Map to governed entities: 95%+"],
+        zh: ["-- 「我們有多少活躍用戶？」",
+             "-- 哪張表？哪些篩選？回看多長？",
+             "-- 用猜的對應：21%",
+             "-- 對應到治理化的實體：95%+"]
+      }
+    },
+    /* every figure carries its own unit */
     stats: [
-      { value: 95, label: { en: "% of business queries automated", zh: "% 商業分析查詢自動化" } },
-      { value: 95, label: { en: "% aggregate accuracy", zh: "% 整體準確率" } },
-      { value: 4,  label: { en: "layers in the analytics stack", zh: "層分析堆疊架構" } }
+      { value: "95%", label: { en: "of business analytics questions answered automatically", zh: "商業分析問題可自動回答" } },
+      { value: { en: "4 layers", zh: "4 層" }, label: { en: "in the agentic analytics stack", zh: "代理式分析堆疊" } },
+      { value: "+6%", label: { en: "more accuracy from adversarial review, at +72% latency", zh: "對抗式複查多換來的準確率，代價是 +72% 延遲" } }
+    ],
+    /* home stack diagram: layer -> the page that explains it */
+    layers: [
+      { href: "stack.html#layer-1", title: { en: "Data Foundations", zh: "資料基礎" },
+        note: { en: "Canonical, governed datasets", zh: "標準化、受治理的資料集" } },
+      { href: "sources.html", title: { en: "Sources of Truth", zh: "真實來源" },
+        note: { en: "Semantic layer, lineage, query corpus, business context", zh: "語意層、血緣、查詢語料、業務脈絡" } },
+      { href: "skills.html", title: { en: "Skills", zh: "Skills" },
+        note: { en: "Procedural knowledge: 21% → 95%", zh: "程序性知識：21% → 95%" } },
+      { href: "validation.html", title: { en: "Validation", zh: "驗證" },
+        note: { en: "Evals, ablations, online safeguards", zh: "評測、消融實驗、線上防護" } }
     ]
   },
 
@@ -90,7 +129,7 @@ window.SITE_PAGES = [
         title: { en: "Sources of Truth", zh: "真實來源" },
         body: { en: "A semantic layer of compiled metric definitions, a lineage graph, a distilled query corpus and a business knowledge graph — governed answer keys the agent can rely on.",
                 zh: "由編譯後的指標定義組成的語意層、血緣圖、提煉過的查詢語料庫，以及業務知識圖譜 —— 代理可以信賴的治理化答案。" } },
-      { date: { en: "Layer 03", zh: "第 3 層" },
+      { date: { en: "Layer 03", zh: "第 3 層" }, key: true,
         title: { en: "Skills", zh: "技能（Skills）" },
         body: { en: "Procedural knowledge encoded as markdown folders Claude reads on demand. Adding Skills lifted aggregate accuracy from 21% to 95%+.",
                 zh: "以 markdown 資料夾編碼、Claude 隨需讀取的程序性知識。加入 Skills 後，整體準確率從 21% 提升到 95%+。" } },
@@ -152,22 +191,22 @@ window.SITE_PAGES = [
     steps: [
       { text: { en: "Before Skills, the agent guessed at structure. Aggregate accuracy sat at just 21%.",
                 zh: "在加入 Skills 之前，代理只能猜測結構。整體準確率僅有 21%。" },
-        visual: { type: "stat", value: { en: "21%", zh: "21%" }, color: "#B3261E" } },
+        visual: { type: "stat", value: { en: "21%", zh: "21%" }, tone: "guess" } },
       { text: { en: "Skills are procedural knowledge — markdown folders Claude reads on demand, encoding how a senior analyst actually works.",
                 zh: "Skills 是程序性知識 —— Claude 隨需讀取的 markdown 資料夾，編碼資深分析師真正的工作方式。" },
-        visual: { type: "color", value: { en: "Procedural knowledge", zh: "程序性知識" }, color: "#6750A4" } },
+        visual: { type: "label", value: { en: "Procedural knowledge", zh: "程序性知識" } } },
       { text: { en: "Knowledge Skills act as routers, narrowing hundreds of tables down to about 30 curated reference files.",
                 zh: "Knowledge Skills 像路由器，把上百張表收斂成大約 30 份精選參考文件。" },
-        visual: { type: "stat", value: { en: "~30 files", zh: "約 30 份" }, color: "#386A20" } },
+        visual: { type: "label", value: { en: "~30 files", zh: "約 30 份" } } },
       { text: { en: "Unbook Skills capture senior-analyst workflows: adversarial review, reusable patterns and known gotchas.",
                 zh: "Unbook Skills 捕捉資深分析師的工作流程：對抗式複查、可重用模式與已知陷阱。" },
-        visual: { type: "color", value: { en: "Senior workflows", zh: "資深工作流程" }, color: "#7D5260" } },
+        visual: { type: "label", value: { en: "Senior workflows", zh: "資深工作流程" } } },
       { text: { en: "Together they collapse ambiguity into governed answers. Accuracy climbed past 95%.",
                 zh: "兩者合力把歧義收斂成治理化答案。準確率攀過 95%。" },
-        visual: { type: "stat", value: { en: "95%+", zh: "95%+" }, color: "#386A20" } },
+        visual: { type: "stat", value: { en: "95%+", zh: "95%+" }, tone: "governed" } },
       { text: { en: "From 21% to 95% — same model, same data. The win was structure, not raw access.",
                 zh: "從 21% 到 95% —— 同樣的模型、同樣的資料。致勝關鍵是結構，而非原始存取權。" },
-        visual: { type: "bars", color: "#386A20", bars: [
+        visual: { type: "bars", bars: [
           { label: { en: "Without Skills", zh: "沒有 Skills" }, value: 21 },
           { label: { en: "With Skills", zh: "有 Skills" }, value: 95 }
         ] } }
@@ -191,9 +230,9 @@ window.SITE_PAGES = [
     bars: {
       title: { en: "The cost of adversarial review", zh: "對抗式複查的代價" },
       series: [
-        { label: { en: "Accuracy gain", zh: "準確率提升" }, value: 6 },
-        { label: { en: "Extra tokens", zh: "額外 token" }, value: 32 },
-        { label: { en: "Extra latency", zh: "額外延遲" }, value: 72 }
+        { label: { en: "Accuracy gain", zh: "準確率提升" }, value: 6, tone: "gain" },
+        { label: { en: "Extra tokens", zh: "額外 token" }, value: 32, tone: "cost" },
+        { label: { en: "Extra latency", zh: "額外延遲" }, value: 72, tone: "cost" }
       ]
     },
     table: {
