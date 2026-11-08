@@ -19,13 +19,15 @@
 ## ✨ 功能特色
 
 - 🧭 **多頁面架構** — 一個 hub 首頁 + 7 個主題頁,每頁有獨立 URL、各自的 SEO 與 JSON-LD
-- 🎨 **8 種版型,適材適所** — hub 總覽、bento 重點磚牆、timeline 時間軸、gallery 卡片牆、scrollytelling 捲動敘事、dashboard 圖表儀表板、FAQ 手風琴、article 長文
+- 🎨 **「從猜測到治理」視覺設計** — 冷調白底 + 石板灰、像 SQL notebook 的版面,只用一個鈷藍色代表「治理化的答案」,磚紅只出現在「猜測(21%)」;首頁主視覺是一支 21% → 95% 的準確率量表,Skills 頁的量表隨捲動分段填滿
+- 🧱 **每頁有自己的版型** — 首頁量表 + 四層堆疊圖、挑戰頁的失敗模式、堆疊頁的四層 slab、可搜尋的參考卡、捲動敘事、消融實驗長條、編號檢核清單、帶行號的結論長文
 - 🌏 **一個語言一個網址** — 中文在 `/`、English 在 `/en/`,每一頁的兩種語言各有自己的網址與靜態內容,兩邊互相標註 `hreflang`;右上角的語言切換是真正的連結,會停在同一頁而不是回首頁
-- 🌗 **深色 / 淺色模式** — 手動切換並透過 `localStorage` 跨頁記憶
+- 🌗 **深色 / 淺色模式** — 預設跟隨系統的 `prefers-color-scheme`;手動切換後才寫進 `localStorage` 跨頁記憶
+- 🏷️ **非官方標示在最上方** — 每一頁頂端都有「非官方整理」提示列與原文連結,不只放在頁尾
 - 🔍 **即時搜尋 + 分類篩選** — 「真實來源」卡片牆可依關鍵字與「結構 / 知識」分類過濾
 - 🗂️ **彈出詳情 + 深連結** — 卡片點開為對話框,網址帶 `#<slug>`,可直接分享、鍵盤可操作
-- 📊 **純前端圖表** — 儀表板的長條圖、捲動敘事的視覺皆為 inline SVG,無任何圖表函式庫
-- 📱 **響應式設計** — 手機(375px)、平板、桌機皆適配,無水平溢出
+- 📊 **純前端圖表** — 準確率量表、消融實驗長條都是純 HTML/CSS,無任何圖表函式庫
+- 📱 **響應式設計** — 桌機為左側頁面目錄,手機改成可展開的選單;390px 無水平溢出
 - ⚡ **零 build 純靜態** — 無 npm、無打包工具、無後端,載入快、可離線瀏覽
 
 ---
@@ -36,18 +38,18 @@
 
 ```
 anthropic-self-service/
-├── index.html          # 首頁 / hub 總覽
-├── challenge.html      # 挑戰(bento:三大失敗模式)
-├── stack.html          # 代理式分析堆疊(timeline:四層架構)
+├── index.html          # 首頁:準確率量表 + 四層堆疊圖 + 閱讀順序
+├── challenge.html      # 挑戰(主張 + 三大失敗模式)
+├── stack.html          # 代理式分析堆疊(四層 slab)
 ├── sources.html        # 真實來源(gallery:可搜尋/篩選)
 ├── skills.html         # Skills:21% → 95%(scrollytelling)
-├── validation.html     # 驗證(dashboard:評測 + 消融實驗)
-├── playbook.html       # 上手策略(FAQ 手風琴)
+├── validation.html     # 驗證(數據列 + 消融長條 + 評測方法表)
+├── playbook.html       # 上手策略(編號檢核清單)
 ├── conclusion.html     # 結論(article:核心金句 + 原文連結)
 ├── en/                 # 以上八頁的英文版,檔名一一對應
 ├── assets/
-│   ├── styles.css      # Material Design 3 設計 token(深/淺色)+ 版型樣式
-│   ├── shell.js        # 共用 chrome:appbar / 跨頁導覽 / footer / dialog / 主題
+│   ├── styles.css      # 設計 token(深/淺色)+ 各版型樣式;字體 Geist / Geist Mono / Noto Sans TC
+│   ├── shell.js        # 共用 chrome:頂欄 / 非官方提示列 / 頁面目錄 / footer / dialog / 主題 / GitHub 星數
 │   └── app.js          # 版型引擎:依 data-page 選 renderer 渲染進 #page
 ├── data/
 │   └── data.js         # 唯一資料檔:SITE_META + SITE_PAGES[](每頁一筆,全雙語)
@@ -86,7 +88,7 @@ uv run --with playwright playwright install chromium      # 首次
 
 搭配自訂的 Playwright 腳本可跑上述檢查。
 
-驗收會自動偵測多頁面,逐頁檢查標題、內容渲染、主題切換、搜尋/篩選/對話框/深連結、375px 響應式、a11y 與 console 無錯誤,並驗「跨頁 nav 皆 200」「兩種語言的網址都直接回 200、內容語言與 `<html lang>` 一致」。
+驗收會自動偵測多頁面,逐頁檢查標題、內容渲染、主題切換、搜尋/篩選/對話框/深連結、390px 響應式、a11y 與 console 無錯誤,並驗「跨頁 nav 皆 200」「兩種語言的網址都直接回 200、內容語言與 `<html lang>` 一致」。
 
 ---
 
